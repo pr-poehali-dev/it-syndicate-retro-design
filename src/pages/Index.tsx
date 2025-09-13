@@ -6,6 +6,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import Icon from '@/components/ui/icon';
+import AnimatedCode from '@/components/AnimatedCode';
+import ArchitectureDiagram from '@/components/ArchitectureDiagram';
 
 const Index = () => {
   const [chatOpen, setChatOpen] = useState(false);
@@ -42,6 +44,87 @@ const Index = () => {
     { client: 'Промышленная группа', result: 'Рост продаж на 40%', duration: '6 месяцев' },
     { client: 'Торговая сеть', result: 'Автоматизация складов', duration: '4 месяца' },
     { client: 'IT-стартап', result: 'Масштабирование до 100k пользователей', duration: '8 месяцев' }
+  ];
+
+  const codeExamples = [
+    {
+      title: "React Component",
+      language: "JSX",
+      lines: [
+        { text: "import React from 'react';", delay: 500 },
+        { text: "", delay: 200 },
+        { text: "const Dashboard = () => {", delay: 300 },
+        { text: "  const [data, setData] = useState([]);", delay: 400 },
+        { text: "  ", delay: 200 },
+        { text: "  useEffect(() => {", delay: 300 },
+        { text: "    fetchAnalytics().then(setData);", delay: 400 },
+        { text: "  }, []);", delay: 300 },
+        { text: "", delay: 200 },
+        { text: "  return <Analytics data={data} />;", delay: 400 },
+        { text: "};", delay: 300 }
+      ]
+    },
+    {
+      title: "API Endpoint",
+      language: "Node.js",
+      lines: [
+        { text: "app.post('/api/analytics', async (req, res) => {", delay: 500 },
+        { text: "  try {", delay: 300 },
+        { text: "    const { userId, metrics } = req.body;", delay: 400 },
+        { text: "    ", delay: 200 },
+        { text: "    const result = await analytics.process({", delay: 400 },
+        { text: "      user: userId,", delay: 300 },
+        { text: "      data: metrics", delay: 300 },
+        { text: "    });", delay: 300 },
+        { text: "    ", delay: 200 },
+        { text: "    res.json({ success: true, result });", delay: 400 },
+        { text: "  } catch (error) {", delay: 300 },
+        { text: "    res.status(500).json({ error });", delay: 400 },
+        { text: "  }", delay: 300 },
+        { text: "});", delay: 300 }
+      ]
+    }
+  ];
+
+  const architectures = [
+    {
+      title: "Микросервисная архитектура",
+      nodes: [
+        { id: "client", label: "Client App", x: 50, y: 50, icon: "Smartphone", color: "#8B4513" },
+        { id: "gateway", label: "API Gateway", x: 200, y: 50, icon: "Globe", color: "#2C1810" },
+        { id: "auth", label: "Auth Service", x: 350, y: 20, icon: "Shield", color: "#C9A96E" },
+        { id: "user", label: "User Service", x: 350, y: 80, icon: "User", color: "#C9A96E" },
+        { id: "payment", label: "Payment", x: 350, y: 140, icon: "CreditCard", color: "#C9A96E" },
+        { id: "db", label: "Database", x: 500, y: 80, icon: "Database", color: "#8B4513" }
+      ],
+      connections: [
+        { from: "client", to: "gateway", label: "HTTPS" },
+        { from: "gateway", to: "auth" },
+        { from: "gateway", to: "user" },
+        { from: "gateway", to: "payment" },
+        { from: "auth", to: "db" },
+        { from: "user", to: "db" },
+        { from: "payment", to: "db" }
+      ]
+    },
+    {
+      title: "CI/CD Pipeline",
+      nodes: [
+        { id: "code", label: "Code", x: 30, y: 100, icon: "Code", color: "#8B4513" },
+        { id: "git", label: "Git Repo", x: 130, y: 100, icon: "GitBranch", color: "#2C1810" },
+        { id: "build", label: "Build", x: 230, y: 100, icon: "Hammer", color: "#C9A96E" },
+        { id: "test", label: "Tests", x: 330, y: 100, icon: "CheckCircle", color: "#C9A96E" },
+        { id: "deploy", label: "Deploy", x: 430, y: 100, icon: "Upload", color: "#8B4513" },
+        { id: "monitor", label: "Monitor", x: 530, y: 100, icon: "Activity", color: "#2C1810" }
+      ],
+      connections: [
+        { from: "code", to: "git", label: "push" },
+        { from: "git", to: "build", label: "trigger" },
+        { from: "build", to: "test", label: "artifact" },
+        { from: "test", to: "deploy", label: "success" },
+        { from: "deploy", to: "monitor", label: "health" }
+      ]
+    }
   ];
 
   const handleChatSubmit = () => {
@@ -131,6 +214,56 @@ const Index = () => {
                   </CardDescription>
                 </CardContent>
               </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Live Code Demo */}
+      <section className="py-16 bg-vintage-dark">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-serif font-bold text-vintage-cream mb-4">ЖИВОЙ КОД</h2>
+            <div className="w-32 h-1 bg-vintage-accent mx-auto mb-6"></div>
+            <p className="text-lg text-vintage-cream/70 max-w-2xl mx-auto">
+              Смотрите, как создается код в режиме реального времени
+            </p>
+          </div>
+          <div className="grid lg:grid-cols-2 gap-8">
+            {codeExamples.map((example, index) => (
+              <AnimatedCode
+                key={index}
+                title={example.title}
+                language={example.language}
+                lines={example.lines}
+                className="animate-slideInLeft"
+                style={{ animationDelay: `${index * 200}ms` }}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Architecture Diagrams */}
+      <section className="py-16 bg-vintage-cream">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-serif font-bold text-primary mb-4">АРХИТЕКТУРА РЕШЕНИЙ</h2>
+            <div className="w-32 h-1 bg-vintage-brown mx-auto mb-6"></div>
+            <p className="text-lg text-vintage-dark/70 max-w-2xl mx-auto">
+              Интерактивные схемы наших технологических решений
+            </p>
+          </div>
+          <div className="space-y-12">
+            {architectures.map((arch, index) => (
+              <ArchitectureDiagram
+                key={index}
+                title={arch.title}
+                nodes={arch.nodes}
+                connections={arch.connections}
+                className="animate-fadeInUp"
+                style={{ animationDelay: `${index * 300}ms` }}
+              />
             ))}
           </div>
         </div>
